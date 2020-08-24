@@ -20,8 +20,6 @@ class CreatePostsTable extends Migration
             $table->text('content');
             $table->string('image');
             $table->timestamp('published_at')->nullable();
-            $table->bigIncrements('id');
-
             $table->timestamps();
         });
     }

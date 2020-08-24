@@ -78,9 +78,13 @@
 
 
         <main class="py-4">
-
             @auth
                 <div class="container">
+                    @if (session()->has('success'))
+                        <div class="alert alert-success" role="alert" id="success">
+                            {{ session()->get('success') }}
+                        </div>
+                    @endif
                     <div class="row">
                         <div class="col-md-4">
                             <ul class="list-group">
@@ -99,5 +103,14 @@
            
         </main>
     </div>
+
+    <script>
+        setTimeout(function() {
+            $('#success').fadeOut('fast');
+        }, 5000);
+
+    </script>
+
+    @yield('scripts')
 </body>
 </html>
