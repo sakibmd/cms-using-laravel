@@ -6,6 +6,7 @@ use App\Http\Requests\Posts\CreatePostsRequest;
 use App\Post;
 use Illuminate\Http\Request;
 
+
 class PostsController extends Controller
 {
     /**
@@ -27,6 +28,20 @@ class PostsController extends Controller
     {
         return view('posts.create');
     }
+
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function trashed()
+    {
+        $trashed = Post::withTrashed()->get();
+        
+        return view('posts.index')->with('posts',$trashed);
+    }
+
 
     /**
      * Store a newly created resource in storage.
@@ -91,6 +106,14 @@ class PostsController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $post = Post::withTrashed()->where('id', $id)->firstOrFail();
+        if($post->trashed()){
+            $post->forceDelete();
+        }else{
+            $post->delete();
+        }
+        session()->flash('success', 'Post Deleted Successfully');
+        return redirect(route('posts.index'));
+
     }
 }

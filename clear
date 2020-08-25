@@ -1,0 +1,262 @@
+[33mcommit 0d156fe7b65fee2fd134bb86c7933e9212c374aa[m[33m ([m[1;36mHEAD -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m)[m
+Author: sakibmd <sakibmd.cse@gmail.com>
+Date:   Tue Aug 25 03:06:25 2020 +0600
+
+    post features running
+
+[1mdiff --git a/app/Http/Controllers/PostsController.php b/app/Http/Controllers/PostsController.php[m
+[1mnew file mode 100644[m
+[1mindex 0000000..e6706ea[m
+[1m--- /dev/null[m
+[1m+++ b/app/Http/Controllers/PostsController.php[m
+[36m@@ -0,0 +1,96 @@[m
+[32m+[m[32m<?php[m
+[32m+[m
+[32m+[m[32mnamespace App\Http\Controllers;[m
+[32m+[m
+[32m+[m[32muse App\Http\Requests\Posts\CreatePostsRequest;[m
+[32m+[m[32muse App\Post;[m
+[32m+[m[32muse Illuminate\Http\Request;[m
+[32m+[m
+[32m+[m[32mclass PostsController extends Controller[m
+[32m+[m[32m{[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Display a listing of the resource.[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @return \Illuminate\Http\Response[m
+[32m+[m[32m     */[m
+[32m+[m[32m    public function index()[m
+[32m+[m[32m    {[m
+[32m+[m[32m        return view('posts.index')->with('posts' ,Post::all());[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Show the form for creating a new resource.[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @return \Illuminate\Http\Response[m
+[32m+[m[32m     */[m
+[32m+[m[32m    public function create()[m
+[32m+[m[32m    {[m
+[32m+[m[32m        return view('posts.create');[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Store a newly created resource in storage.[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @param  \Illuminate\Http\Request  $request[m
+[32m+[m[32m     * @return \Illuminate\Http\Response[m
+[32m+[m[32m     */[m
+[32m+[m[32m    public function store(CreatePostsRequest $request)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        $image = $request->image->store('posts');[m
+[32m+[m[32m        $post = new Post();[m
+[32m+[m[32m        $post->title = $request->title;[m
+[32m+[m[32m        $post->description = $request->description;[m
+[32m+[m[32m        $post->content = $request->content;[m
+[32m+[m[32m        $post->published_at = $request->published_at;[m
+[32m+[m[32m        $post->image = $image;[m
+[32m+[m[32m        $post->save();[m
+[32m+[m
+[32m+[m[32m        session()->flash('success', 'Post Inserted Successfully');[m
+[32m+[m[32m        return redirect(route('posts.index'));[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Display the specified resource.[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @param  int  $id[m
+[32m+[m[32m     * @return \Illuminate\Http\Response[m
+[32m+[m[32m     */[m
+[32m+[m[32m    public function show($id)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        //[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Show the form for editing the specified resource.[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @param  int  $id[m
+[32m+[m[32m     * @return \Illuminate\Http\Response[m
+[32m+[m[32m     */[m
+[32m+[m[32m    public function edit($id)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        //[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Update the specified resource in storage.[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @param  \Illuminate\Http\Request  $request[m
+[32m+[m[32m     * @param  int  $id[m
+[32m+[m[32m     * @return \Illuminate\Http\Response[m
+[32m+[m[32m     */[m
+[32m+[m[32m    public function update(Request $request, $id)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        //[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Remove the specified resource from storage.[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @param  int  $id[m
+[32m+[m[32m     * @return \Illuminate\Http\Response[m
+[32m+[m[32m     */[m
+[32m+[m[32m    public function destroy($id)[m
+[32m+[m[32m    {[m
+[32m+[m[32m        //[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[1mdiff --git a/app/Http/Requests/Posts/CreatePostsRequest.php b/app/Http/Requests/Posts/CreatePostsRequest.php[m
+[1mnew file mode 100644[m
+[1mindex 0000000..f32148b[m
+[1m--- /dev/null[m
+[1m+++ b/app/Http/Requests/Posts/CreatePostsRequest.php[m
+[36m@@ -0,0 +1,33 @@[m
+[32m+[m[32m<?php[m
+[32m+[m
+[32m+[m[32mnamespace App\Http\Requests\Posts;[m
+[32m+[m
+[32m+[m[32muse Illuminate\Foundation\Http\FormRequest;[m
+[32m+[m
+[32m+[m[32mclass CreatePostsRequest extends FormRequest[m
+[32m+[m[32m{[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Determine if the user is authorized to make this request.[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @return bool[m
+[32m+[m[32m     */[m
+[32m+[m[32m    public function authorize()[m
+[32m+[m[32m    {[m
+[32m+[m[32m        return true;[m
+[32m+[m[32m    }[m
+[32m+[m
+[32m+[m[32m    /**[m
+[32m+[m[32m     * Get the validation rules that apply to the request.[m
+[32m+[m[32m     *[m
+[32m+[m[32m     * @return array[m
+[32m+[m[32m     */[m
+[32m+[m[32m    public function rules()[m
+[32m+[m[32m    {[m
+[32m+[m[32m        return [[m
+[32m+[m[32m            'title' => 'required|unique:posts',[m
+[32m+[m[32m            'description' => 'required',[m
+[32m+[m[32m            'content' => 'required',[m
+[32m+[m[32m            'image' => 'required|image'[m
+[32m+[m[32m        ];[m
+[32m+[m[32m    }[m
+[32m+[m[32m}[m
+[1mdiff --git a/resources/views/layouts/app.blade.php b/resources/views/layouts/app.blade.php[m
+[1mindex 03d6687..3129b01 100644[m
+[1m--- a/resources/views/layouts/app.blade.php[m
+[1m+++ b/resources/views/layouts/app.blade.php[m
+[36m@@ -88,7 +88,7 @@[m
+                     <div class="row">[m
+                         <div class="col-md-4">[m
+                             <ul class="list-group">[m
+[31m-                                <li class="list-group-item"><a href="">Posts</a></li>[m
+[32m+[m[32m                                <li class="list-group-item"><a href="{{ route('posts.index') }}">Posts</a></li>[m
+                                 <li class="list-group-item"><a href="{{ route('categories.index') }}">Categories</a></li>[m
+                             </ul>[m
+                         </div>[m
+[1mdiff --git a/resources/views/posts/create.blade.php b/resources/views/posts/create.blade.php[m
+[1mnew file mode 100644[m
+[1mindex 0000000..f278193[m
+[1m--- /dev/null[m
+[1m+++ b/resources/views/posts/create.blade.php[m
+[36m@@ -0,0 +1,47 @@[m
+[32m+[m[32m@extends('layouts.app')[m
+[32m+[m
+[32m+[m[32m@section('content')[m
+[32m+[m[32m<div class="card card-default">[m
+[32m+[m[32m    <div class="card-header">[m
+[32m+[m[32m        <strong>Create Post</strong>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m    <div class="card-body">[m
+[32m+[m[32m        @if ($errors->any())[m
+[32m+[m[32m        <div class="alert alert-danger">[m
+[32m+[m[32m            <ul>[m
+[32m+[m[32m                @foreach ($errors->all() as $error)[m
+[32m+[m[32m                    <li>{{ $error }}</li>[m
+[32m+[m[32m                @endforeach[m
+[32m+[m[32m            </ul>[m
+[32m+[m[32m        </div>[m
+[32m+[m[32m    @endif[m
+[32m+[m[32m        <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">[m
+[32m+[m[32m            @csrf[m
+[32m+[m[32m            <div class="form-group">[m
+[32m+[m[32m                <label for="title">Title</label>[m
+[32m+[m[32m                <input type="text" name="title" id="title" class="form-control">[m
+[32m+[m[32m            </div>[m
+[32m+[m[32m            <div class="form-group">[m
+[32m+[m[32m                <label for="description">Description</label>[m
+[32m+[m[32m                <textarea name="description" id="description" cols="5" rows="5" class="form-control"></textarea>[m
+[32m+[m[32m            </div>[m
+[32m+[m[32m            <div class="form-group">[m
+[32m+[m[32m                <label for="content">Content</label>[m
+[32m+[m[32m                <textarea name="content" id="content" cols="5" rows="5" class="form-control"></textarea>[m
+[32m+[m[32m            </div>[m
+[32m+[m[32m            <div class="form-group">[m
+[32m+[m[32m                <label for="published_at">Published At</label>[m
+[32m+[m[32m                <input type="text" name="published_at" id="published_at" class="form-control">[m
+[32m+[m[32m            </div>[m
+[32m+[m[32m            <div class="form-group">[m
+[32m+[m[32m                <label for="image">Image</label>[m
+[32m+[m[32m                <input type="file" name="image" id="image" class="form-control">[m
+[32m+[m[32m            </div>[m
+[32m+[m[32m            <div class="form-group">[m
+[32m+[m[32m                <button type="submit" class="btn btn-success">Create</button>[m
+[32m+[m[32m                <a href="{{ URL::previous()  }}" class="btn btn-danger">Back</a>[m
+[32m+[m[32m            </div>[m
+[32m+[m[32m        </form>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m</div>[m
+[32m+[m[32m@endsection[m
+\ No newline at end of file[m
+[1mdiff --git a/resources/views/posts/index.blade.php b/resources/views/posts/index.blade.php[m
+[1mnew file mode 100644[m
+[1mindex 0000000..3ccb263[m
+[1m--- /dev/null[m
+[1m+++ b/resources/views/posts/index.blade.php[m
+[36m@@ -0,0 +1,32 @@[m
+[32m+[m[32m@extends('layouts.app')[m
+[32m+[m
+[32m+[m[32m@section('content')[m
+[32m+[m[32m<div class="d-flex justify-content-end py-2">[m
+[32m+[m[32m    <a href="{{ route('posts.create') }}" class="btn btn-success">Add Post</a>[m
+[32m+[m[32m</div>[m
+[32m+[m[32m<div class="card card-default">[m
+[32m+[m[32m    <div class="card-header">[m
+[32m+[m[32m        <strong>Posts</strong>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m    <div class="card-body">[m
+[32m+[m[32m        <div class="table-responsive">[m
+[32m+[m[32m            <table class="table">[m
+[32m+[m[32m                <thead>[m
+[32m+[m[32m                    <tr>[m
+[32m+[m[32m                        <th>Image</th>[m
+[32m+[m[32m                        <th>Title</th>[m
+[32m+[m[32m                    </tr>[m
+[32m+[m[32m                </thead>[m
+[32m+[m[32m                <tbody>[m
+[32m+[m[32m                    @foreach ($posts as $post)[m
+[32m+[m[32m                    <tr>[m
+[32m+[m[32m                        <td><img src="{{ asset('storage/'.$post->image) }}" width="120px" height="65px" alt="image"></td>[m
+[32m+[m[32m                        <td>{{ $post->title }}</td>[m
+[32m+[m[32m                    </tr>[m
+[32m+[m[32m                    @endforeach[m
+[32m+[m[32m                </tbody>[m
+[32m+[m[32m            </table>[m
+[32m+[m[32m        </div>[m
+[32m+[m[32m    </div>[m
+[32m+[m[32m</div>[m
+[32m+[m[32m@endsection[m
+\ No newline at end of file[m
+[1mdiff --git a/routes/web.php b/routes/web.php[m
+[1mindex 4cfe159..7da38bf 100644[m
+[1m--- a/routes/web.php[m
+[1m+++ b/routes/web.php[m
+[36m@@ -20,3 +20,4 @@[m [mAuth::routes();[m
+ Route::get('/home', 'HomeController@index')->name('home');[m
+ [m
+ Route::resource('categories', 'CategoriesController');[m
+[32m+[m[32mRoute::resource('posts', 'PostsController');[m

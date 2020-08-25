@@ -15,6 +15,8 @@
                     <tr>
                         <th>Image</th>
                         <th>Title</th>
+                        <th></th>
+                        <th></th>
                     </tr>
                 </thead>
                 <tbody>
@@ -22,6 +24,18 @@
                     <tr>
                         <td><img src="{{ asset('storage/'.$post->image) }}" width="120px" height="65px" alt="image"></td>
                         <td>{{ $post->title }}</td>
+                        <td>
+                            @if (!$post->trashed())
+                                 <a href="" class="btn  btn-info">Edit</a>
+                            @endif
+                        </td>  
+                        <td>
+                            <form action="{{ route('posts.destroy', $post->id) }}" method="post">
+                                @csrf 
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-danger">{{ $post->trashed() ? 'Delete' : 'Trash' }}</button>
+                            </form>
+                        </td>
                     </tr>
                     @endforeach
                 </tbody>
