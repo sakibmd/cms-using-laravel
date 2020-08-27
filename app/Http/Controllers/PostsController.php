@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\Posts\CreatePostsRequest;
 use App\Post;
 use Illuminate\Http\Request;
-
+use Illuminate\Support\Facades\Storage;
 
 class PostsController extends Controller
 {
@@ -37,9 +37,10 @@ class PostsController extends Controller
      */
     public function trashed()
     {
-        $trashed = Post::withTrashed()->get();
-        
-        return view('posts.index')->with('posts',$trashed);
+        //$trashed = Post::withTrashed()->get();
+        $posts = Post::onlyTrashed()->get(); //shudu trashed post show korbe
+        $trash = "trash";
+        return view('posts.index',compact('posts','trash'));
     }
 
 
@@ -108,7 +109,9 @@ class PostsController extends Controller
     {
         $post = Post::withTrashed()->where('id', $id)->firstOrFail();
         if($post->trashed()){
+            Storage::delete($post->image);
             $post->forceDelete();
+
         }else{
             $post->delete();
         }
