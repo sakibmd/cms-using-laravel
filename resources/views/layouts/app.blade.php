@@ -16,7 +16,13 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
 
     <!-- Styles -->
+
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <style>
+        a.btn-info{
+            color:#fff;
+        }
+    </style>
 
     @yield('css')
 </head>
