@@ -6,15 +6,7 @@
         <strong>{{ isset($post) ? 'Update Post' : 'Create Post' }}</strong>
     </div>
     <div class="card-body">
-        @if ($errors->any())
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+        @include('partials.errors')
         <form action="{{ isset($post) ? route('posts.update', $post->id) : route('posts.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @if (isset($post))
@@ -50,6 +42,18 @@
                     @endforeach
                 </select>
             </div>
+            @if ($tags->count() > 0)
+            <div class="form-group">
+                <label for="tags">Tags</label>
+                <select name="tags[]" id="tags" class="form-control" multiple>
+                    @foreach ($tags as $tag)
+                        <option value="{{ $tag->id }}">
+                            {{ $tag->name }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+            @endif
             <div class="form-group">
                 <label for="published_at">Published At</label>
                 <input type="text" name="published_at" id="published_at" class="form-control"  value="{{ old('published_at', isset($post) ? $post->published_at : '' ) }}">

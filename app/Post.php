@@ -10,7 +10,7 @@ class Post extends Model
 {
     use SoftDeletes;
     protected $fillable = [
-        'title', 'published_at', 'image', 'description', 'content', 'category_id'
+        'title', 'published_at', 'image', 'description', 'content', 'category_id', 'tags'
     ];
 
     /**
@@ -25,5 +25,9 @@ class Post extends Model
 
     public function category(){
         return $this->belongsTo(Category::class);
+    }
+
+    public function tags(){
+        return $this->belongsToMany('App\Tag')->withTimestamps();
     }
 }

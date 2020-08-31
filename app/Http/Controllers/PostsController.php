@@ -6,11 +6,18 @@ use App\Category;
 use App\Http\Requests\Posts\CreatePostsRequest;
 use App\Http\Requests\Posts\UpdatePostsRequest;
 use App\Post;
+use App\Tag;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 
 class PostsController extends Controller
 {
+    
+    public function __construct()
+    {
+        $this->middleware('verifyCategoriesCount')->only(['create', 'store']);
+    }
+    
+    
     /**
      * Display a listing of the resource.
      *
@@ -28,7 +35,7 @@ class PostsController extends Controller
      */
     public function create()
     {
-        return view('posts.create')->with('categories', Category::all());
+        return view('posts.create')->with('categories', Category::all())->with('tags', Tag::all());
     }
 
 
@@ -54,15 +61,23 @@ class PostsController extends Controller
      */
     public function store(CreatePostsRequest $request)
     {
+        
+        //dd($request->all());
         $image = $request->image->store('posts');
-        $post = new Post();
-        $post->title = $request->title;
-        $post->description = $request->description;
-        $post->content = $request->content;
-        $post->category_id = $request->category;
-        $post->image = $image;
-        $post->save();
+       
+        $post = Post::create([
+            'title' => $request->title,
+            'description' => $request->description,
+            'content' => $request->content,
+            'category_id' => $request->category,
+            'published_at' => $request->published_at,
+            'image' => $image,
+        ]);
 
+        if($request->tags){
+           $post->tags()->attach($request->tags);
+        }
+        
         session()->flash('success', 'Post Inserted Successfully');
         return redirect(route('posts.index'));
     }
@@ -95,7 +110,7 @@ class PostsController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('posts.create')->with('post', $post)->with('categories', Category::all());
+        return view('posts.create')->with('post', $post)->with('categories', Category::all())->with('tags', Tag::all());
     }
 
     /**
@@ -114,6 +129,7 @@ class PostsController extends Controller
             $data['image'] = $image;
         }
         $post->update($data);
+        $post->tags()->sync($request->tags);
         session()->flash('success', 'Post Updated Successfully');
         return redirect(route('posts.index'));
 
@@ -135,6 +151,7 @@ class PostsController extends Controller
         }else{
             $post->delete();
         }
+        $post->tags()->detach();
         session()->flash('success', 'Post Deleted Successfully');
         return redirect(route('posts.index'));
 
