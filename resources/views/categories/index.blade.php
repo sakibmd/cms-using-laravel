@@ -50,7 +50,7 @@
                                 </button>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="text-center">Are you sure to delete this category?</div>
+                                    <div class="text-center">Are you sure to delete this Category?</div>
                                 </div>
                                 <div class="modal-footer">
                                 <button type="button" class="btn btn-success" data-dismiss="modal">No, Go Back</button>
