@@ -47,7 +47,14 @@
                 <label for="tags">Tags</label>
                 <select name="tags[]" id="tags" class="form-control select-tags" multiple>
                     @foreach ($tags as $tag)
-                        <option value="{{ $tag->id }}">
+                        <option 
+                            
+                            @foreach($post->tags as $postTag) 
+                                 {{ $postTag->id == $tag->id ? 'selected' : '' }}
+                             @endforeach 
+                             
+                             value="{{ $tag->id }}"
+                        >
                             {{ $tag->name }}
                         </option>
                     @endforeach

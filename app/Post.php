@@ -5,12 +5,13 @@ namespace App;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Storage;
+use App\User;
 
 class Post extends Model
 {
     use SoftDeletes;
     protected $fillable = [
-        'title', 'published_at', 'image', 'description', 'content', 'category_id', 'tags'
+        'title', 'published_at', 'image', 'description', 'content', 'category_id', 'tags', 'user_id'
     ];
 
     /**
@@ -29,5 +30,9 @@ class Post extends Model
 
     public function tags(){
         return $this->belongsToMany('App\Tag')->withTimestamps();
+    }
+
+    public function user(){
+        return $this->belongsTo(User::class);
     }
 }

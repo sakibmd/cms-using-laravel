@@ -122,7 +122,7 @@ class PostsController extends Controller
      */
     public function update(UpdatePostsRequest $request, Post $post)
     {
-        $data = $request->only(['title', 'name', 'description', 'published_at']);
+        $data = $request->only(['title', 'name', 'description', 'content','published_at']);
         if($request->hasFile('image')){
             $image = $request->image->store('posts');
             $post->deleteImage();
