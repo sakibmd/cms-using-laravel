@@ -49,9 +49,11 @@
                     @foreach ($tags as $tag)
                         <option 
                             
-                            @foreach($post->tags as $postTag) 
-                                 {{ $postTag->id == $tag->id ? 'selected' : '' }}
-                             @endforeach 
+                            @isset($post)
+                                @foreach($post->tags as $postTag) 
+                                    {{ $postTag->id == $tag->id ? 'selected' : '' }}
+                                @endforeach 
+                            @endisset
                              
                              value="{{ $tag->id }}"
                         >
