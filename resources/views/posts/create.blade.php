@@ -74,7 +74,8 @@
             @endif --}}
             <div class="form-group">
                 <label for="image">Image</label>
-                <input type="file" name="image" id="image" class="form-control">
+                <input type="file" name="image" id="image" class="form-control" onchange="loadPreview(this);">
+                <img id="preview_img">
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-success">{{ isset($post) ? 'Update' : 'Create' }}</button>
@@ -98,6 +99,22 @@
     $(document).ready(function() {
         $('.select-tags').select2();
     })
+
+    function loadPreview(input, id) {
+      id = id || '#preview_img';
+      if (input.files && input.files[0]) {
+          var reader = new FileReader();
+   
+          reader.onload = function (e) {
+              $(id)
+                      .attr('src', e.target.result)
+                      .width(200)
+                      .height(150);
+          };
+   
+          reader.readAsDataURL(input.files[0]);
+      }
+   }
 </script>
 @endsection
 

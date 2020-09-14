@@ -8,6 +8,7 @@ use App\Http\Requests\Posts\UpdatePostsRequest;
 use App\Post;
 use App\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostsController extends Controller
 {
@@ -72,6 +73,7 @@ class PostsController extends Controller
             'category_id' => $request->category,
             'published_at' => $request->published_at,
             'image' => $image,
+            'user_id' => Auth::id(),
         ]);
 
         if($request->tags){
