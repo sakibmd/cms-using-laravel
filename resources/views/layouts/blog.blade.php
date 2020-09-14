@@ -79,8 +79,9 @@
 
 
     <!-- Scripts -->
+    <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=ra-5f5fb96836345445"></script> 
     <script src="{{ asset('js/page.min.js') }}"></script>
-    <script src="{{ asset('js/script.js') }}"></script>
+    <script src="{{ asset('js/script.js') }}"></script> 
 
   </body>
 </html>
