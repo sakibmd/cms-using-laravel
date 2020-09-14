@@ -19,11 +19,6 @@ class WelcomeController extends Controller
             $posts  = Post::paginate(2);
         }
 
-
-
-
-
-
         return view('welcome')
         ->with('categories', Category::all())
         ->with('tags', Tag::all())
