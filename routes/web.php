@@ -20,16 +20,16 @@ Route::get('blog/tags/{tag}',[PostsController::class, 'tag'])->name('blog.tag');
 
 Route::post('subscriber', 'SubscriberController@store')->name('subscriber.store');
 
-Auth::routes();
+Auth::routes(['verify' => true]);
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/home', 'HomeController@index')->name('home')->middleware('verified');;
 
 Route::resource('categories', 'CategoriesController');
 Route::resource('posts', 'PostsController');
 Route::get('trashed-posts', 'PostsController@trashed')->name('trashed-posts.index');
 Route::put('restore-posts/{post}','PostsController@restore')->name('restore.posts');
 
-Route::middleware(['auth'])->group(function () {
+Route::middleware(['auth', 'verified'])->group(function () {
     Route::resource('categories', 'CategoriesController');
     Route::resource('tags', 'TagsController');
     Route::resource('posts', 'PostsController');
@@ -48,7 +48,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 
-Route::middleware(['auth', 'admin'])->group(function () {
+Route::middleware(['auth', 'admin', 'verified'])->group(function () {
     Route::get('users', 'UsersController@index')->name('users.index');
     Route::get('users/edit-profile', 'UsersController@edit')->name('users.edit-profile');
     Route::put('users/update-profile', 'UsersController@update')->name('users.update-profile');
