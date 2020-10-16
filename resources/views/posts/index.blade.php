@@ -27,19 +27,22 @@
                     <td><img src="{{ asset('storage/'.$post->image) }}" width="120px" height="65px" alt="image"></td>
                     <td>{{ $post->title }}</td>
                     <td>{{ $post->category->name }}</td>
-                    @if ($post->trashed())
-                        <td>
-                            <form action="{{ route('restore.posts', $post->id) }}" method="POST">
-                                @csrf 
-                                @method('PUT')
-                                <button type="submit" class="btn btn-info">Restore</button>
-                            </form>
-                        </td>
-                    @else
-                        <td>
-                            <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-info">Edit</a>
-                        </td> 
-                    @endif
+                        @if ($post->trashed())
+                            <td>
+                                <form action="{{ route('restore.posts', $post->id) }}" method="POST">
+                                    @csrf 
+                                    @method('PUT')
+                                    <button type="submit" class="btn btn-info">Restore</button>
+                                </form>
+                            </td>
+                        @else
+                            @if (Auth::id() == $post->user_id)
+                            <td>
+                                <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-info">Edit</a>
+                            </td> 
+                            @endif
+                            
+                        @endif
                     <td>
                         <form action="{{ route('posts.destroy', $post->id) }}" method="post">
                             @csrf 

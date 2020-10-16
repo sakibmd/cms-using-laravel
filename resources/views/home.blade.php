@@ -1,10 +1,8 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
+
+            <div class="card text-center">
                 <div class="card-header">Dashboard</div>
 
                 <div class="card-body">
@@ -14,10 +12,12 @@
                         </div>
                     @endif
 
-                    You are logged in!
+                    @if (Auth::id() == 1)
+                        <h2>Welcome Admin - <strong>{{ Auth::user()->name }}</strong></h2>
+                    @else
+                    <h2>Welcome - <strong>{{ Auth::user()->name }}</strong></h2>
+                    @endif
                 </div>
             </div>
-        </div>
-    </div>
-</div>
+       
 @endsection

@@ -104,13 +104,39 @@
                     <div class="row">
                         <div class="col-md-4">
                             <ul class="list-group">
+                                <li class="list-group-item"><a href="{{ route('home') }}">Home</a></li>
                                 @if (Auth::user()->isAdmin())
                                     <li class="list-group-item">
                                         <a href="{{ route('users.index') }}">User</a>
                                     </li>
                                 @endif
-                                <li class="list-group-item"><a href="{{ route('posts.index') }}">Posts</a>
-                                </li>
+                                
+                                <li class="list-group-item"><a href="{{ route('posts.index') }}">Posts</a></li>
+
+
+                                {{-- admin pending post --}}
+                                @if (Auth::user()->isAdmin())
+                                    <li class="list-group-item">
+                                        <a href="{{ route('pending.posts') }}">Pending Post</a>
+                                    </li>
+                                @endif
+
+                                {{-- subscriber --}}
+                                @if (Auth::user()->isAdmin())
+                                    <li class="list-group-item">
+                                        <a href="{{ route('subscriber.index') }}">Manage Subscriber</a>
+                                    </li>
+                                @endif
+
+
+                                {{-- user pending post --}}
+                                @if (Auth::id() != 1)
+                                    <li class="list-group-item">
+                                        <a href="{{ route('pending.posts.user') }}">Pending Post</a>
+                                    </li>
+                                @endif
+
+
                                 <li class="list-group-item"><a href="{{ route('tags.index') }}">Tags</a></li>
                                 <li class="list-group-item"><a href="{{ route('categories.index') }}">Categories</a></li>
                             </ul>

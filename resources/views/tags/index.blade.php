@@ -2,7 +2,9 @@
 
 @section('content')
     <div class="d-flex justify-content-end py-2">
-        <a href="{{ route('tags.create') }}" class="btn btn-success">Add Tags</a>
+        @if (Auth::id() == 1)
+            <a href="{{ route('tags.create') }}" class="btn btn-success">Add Tags</a>
+        @endif
     </div>
     <div class="card">
         <div class="card-header">
@@ -17,7 +19,9 @@
                         <th>No.</th>
                         <th>Name</th>
                         <th>Post Count</th>
-                        <th></th>
+                        @if (Auth::id() == 1)
+                            <th></th>
+                        @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -26,10 +30,13 @@
                             <td>{{ $key+1 }}</td>
                             <td>{{ $tag->name }}</td>
                             <td>{{ $tag->posts->count() }}</td>
-                            <td>
-                                <a href="{{ route('tags.edit', $tag->id) }}" class="btn btn-info">Edit</a>
-                                <button class="btn btn-danger" onclick="handleDelete({{ $tag->id }})">Delete</button>
-                            </td>
+                            @if (Auth::id() == 1)
+                                <td>
+                                    <a href="{{ route('tags.edit', $tag->id) }}" class="btn btn-info">Edit</a>
+                                    <button class="btn btn-danger" onclick="handleDelete({{ $tag->id }})">Delete</button>
+                                </td>
+                            @endif
+                           
                         </tr>
                     @endforeach
                 </tbody>

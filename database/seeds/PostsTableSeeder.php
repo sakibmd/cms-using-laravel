@@ -56,6 +56,8 @@ class PostsTableSeeder extends Seeder
 
         $post100 = $author1->posts()->create([
             'title' => 'We relocated our office to a new designed garage',
+            'published_at' => '2020-10-10 12:00:00',
+            'is_approved' => 'yes',
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit.in reprehenderit perspiciatis dignissimos pariatur quae numquam.',
             'content' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit rem itaque exercitationem magni blanditiis architecto possimus, hic ducimus dolor facere ratione vel ullam in reprehenderit perspiciatis dignissimos pariatur quae numquam. ',
             'category_id' => $category1->id,
@@ -63,6 +65,8 @@ class PostsTableSeeder extends Seeder
         ]);
         $post2 = $author2->posts()->create([
             'title' => 'Top 5 brilliant content marketing strategies',
+            'published_at' => '2020-10-10 12:00:00',
+            'is_approved' => 'yes',
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit.in reprehenderit perspiciatis dignissimos pariatur quae numquam.',
             'content' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit rem itaque exercitationem magni blanditiis architecto possimus, hic ducimus dolor facere ratione vel ullam in reprehenderit perspiciatis dignissimos pariatur quae numquam. ',
             'category_id' => $category2->id,
@@ -71,6 +75,8 @@ class PostsTableSeeder extends Seeder
 
         $post3 = $author3->posts()->create([
             'title' => 'Best practices for minimalist design with example',
+            'published_at' => '2020-10-10 12:00:00',
+            'is_approved' => 'yes',
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit.in reprehenderit perspiciatis dignissimos pariatur quae numquam.',
             'content' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit rem itaque exercitationem magni blanditiis architecto possimus, hic ducimus dolor facere ratione vel ullam in reprehenderit perspiciatis dignissimos pariatur quae numquam. ',
             'category_id' => $category3->id,
@@ -79,6 +85,8 @@ class PostsTableSeeder extends Seeder
 
         $post4 = $author2->posts()->create([
             'title' => 'We relocated our office to a new designed garage',
+            'published_at' => '2020-10-10 12:00:00',
+            'is_approved' => 'yes',
             'description' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit.in reprehenderit perspiciatis dignissimos pariatur quae numquam.',
             'content' => 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Impedit rem itaque exercitationem magni blanditiis architecto possimus, hic ducimus dolor facere ratione vel ullam in reprehenderit perspiciatis dignissimos pariatur quae numquam. ',
             'category_id' => $category1->id,

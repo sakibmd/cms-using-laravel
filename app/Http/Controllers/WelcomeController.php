@@ -14,6 +14,6 @@ class WelcomeController extends Controller
         return view('welcome')
         ->with('categories', Category::all())
         ->with('tags', Tag::all())
-        ->with('posts', Post::searched()->paginate(2));
+        ->with('posts', Post::where('is_approved', 'yes')->searched()->paginate(4));
     }
 }

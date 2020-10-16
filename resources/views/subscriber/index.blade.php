@@ -2,41 +2,31 @@
 
 @section('content')
     <div class="d-flex justify-content-end py-2">
-        @if (Auth::id() == 1)
-            <a href="{{ route('categories.create') }}" class="btn btn-success">Add Categories</a>
-        @endif
+        
     </div>
     <div class="card">
         <div class="card-header">
-            Categories
+            Subscriber List
         </div>
-        @if ($categories->count() > 0)
+        @if ($subscribers->count() > 0)
         <div class="card-body">
             <div class="table-responsive">
             <table class="table">
                 <thead>
                     <tr>
-                        <th>No.</th>
-                        <th>Name</th>
-                        <th>Post Count</th>
-                        @if (Auth::id() == 1)
-                            <th></th>
-                        @endif
+                        <th>Email</th>
+                        <th>Added By</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($categories as $key => $category)
+                    @foreach ($subscribers as $subscriber)
                         <tr>
-                            <td>{{ $key+1 }}</td>
-                            <td>{{ $category->name }}</td>
-                            <td>{{ $category->posts->count() }}</td>
-                            @if (Auth::id() == 1)
+                            <td>{{ $subscriber->email }}</td>
+                            <td>{{ $subscriber->created_at->diffforhumans() }}</td>
                             <td>
-                                <a href="{{ route('categories.edit', $category->id) }}" class="btn btn-info">Edit</a>
-                                <button class="btn btn-danger" onclick="handleDelete({{ $category->id }})">Delete</button>
+                                <button class="btn btn-danger" onclick="handleDelete({{ $subscriber->id }})">Delete</button>
                             </td>
-                            @endif
-                            
                         </tr>
                     @endforeach
                 </tbody>
@@ -44,20 +34,20 @@
             </div>
 
             <!-- Modal -->
-            <div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal fade" id="removeSubscriberModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
-                    <form action="" id="deleteCategoryForm" method="POST">
+                    <form action="" id="removeSubscriberForm" method="POST">
                         @csrf 
                         @method('DELETE')
                             <div class="modal-content">
                                 <div class="modal-header">
-                                <h5 class="modal-title" id="exampleModalLabel">Category Delete</h5>
+                                <h5 class="modal-title" id="exampleModalLabel">Subscriber Remove</h5>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                                 </div>
                                 <div class="modal-body">
-                                    <div class="text-center">Are you sure to delete this Category?</div>
+                                    <div class="text-center">Are you sure to remove this Subscriber?</div>
                                 </div>
                                 <div class="modal-footer">
                                 <button type="button" class="btn btn-success" data-dismiss="modal">No, Go Back</button>
@@ -69,6 +59,8 @@
             </div>
 
         </div>
+        @else 
+            <h2 class="bg-dark text-white text-center p-3 m-3">No Subscriber Found</h2>
         @endif
     </div>
 @endsection
@@ -76,10 +68,9 @@
 @section('scripts')
    <script>
        function handleDelete(id){
-           var form = document.getElementById('deleteCategoryForm')
-           form.action = '/categories/' + id
-           $('#deleteCategoryModal').modal('show')
-           console.log(form)
+           var form = document.getElementById('removeSubscriberForm')
+           form.action = '/subscriber/' + id
+           $('#removeSubscriberModal').modal('show')
        }
    </script>
 @endsection

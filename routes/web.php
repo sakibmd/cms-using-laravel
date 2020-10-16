@@ -18,6 +18,8 @@ Route::get('blog/posts/{post}',[PostsController::class, 'show'])->name('blog.sho
 Route::get('blog/categories/{category}',[PostsController::class, 'category'])->name('blog.category');
 Route::get('blog/tags/{tag}',[PostsController::class, 'tag'])->name('blog.tag');
 
+Route::post('subscriber', 'SubscriberController@store')->name('subscriber.store');
+
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
@@ -33,6 +35,16 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('posts', 'PostsController');
     Route::get('trashed-posts', 'PostsController@trashed')->name('trashed-posts.index');
     Route::put('restore-posts/{post}','PostsController@restore')->name('restore.posts');
+
+    Route::get('pending-posts', 'PostsController@pending')->name('pending.posts');
+    Route::get('user-pending-posts', 'PostsController@pendingPosTForUser')->name('pending.posts.user');
+    Route::get('pending-posts-approve/{id}', 'PostsController@pendingApprove')->name('pending.approve');
+    Route::get('pending-posts-remove/{id}', 'PostsController@pendingRemove')->name('pending.remove');
+
+    Route::get('subscriber','SubscriberController@index')->name('subscriber.index');
+    Route::delete('subscriber/{subscriber}','SubscriberController@deleteSubscriberFunction')->name('subscriber.destroy');
+
+
 });
 
 

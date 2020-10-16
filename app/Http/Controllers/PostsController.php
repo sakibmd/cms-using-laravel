@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use App\Category;
 use App\Http\Requests\Posts\CreatePostsRequest;
 use App\Http\Requests\Posts\UpdatePostsRequest;
+use App\Notifications\NewPostNotify;
 use App\Post;
+use App\Subscriber;
 use App\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class PostsController extends Controller
 {
@@ -26,8 +29,52 @@ class PostsController extends Controller
      */
     public function index()
     {
-        return view('posts.index')->with('posts' ,Post::all());
+        
+
+        if(Auth::id() == 1){
+            $posts = Post::where('is_approved', 'yes')->latest()->get();
+        }else{
+            $posts = Post::where('user_id', Auth::id())->where('is_approved', 'yes')->latest()->get(); 
+        }
+        return view('posts.index', compact('posts'));
+
+
     }
+
+
+    public function pending(){
+        $posts = Post::where('is_approved', 'no')->latest()->get();
+        return view('posts.pending', compact('posts'));
+    }
+
+    public function pendingPosTForUser(){
+        $posts = Post::where('user_id', Auth::id())->where('is_approved', 'no')->latest()->get();
+        return view('posts.pendingPostforUser', compact('posts'));
+    }
+
+    public function pendingApprove($id){
+        $post = Post::find($id);
+        $post->is_approved = 'yes';
+        $post->save();
+
+        $subscribers = Subscriber::all();
+        foreach ($subscribers as $subscriber) {
+            Notification::route('mail',$subscriber->email)
+            ->notify(new NewPostNotify($post));
+        }
+        
+        session()->flash('success', 'Pending Post Approved Successfully');
+        return redirect()->back();
+    }
+
+    public function pendingRemove($id){
+        Post::find($id)->delete();
+        
+        session()->flash('success', 'Pending Post Removed Successfully');
+        return redirect()->back();
+    }
+
+    
 
     /**
      * Show the form for creating a new resource.
@@ -48,9 +95,16 @@ class PostsController extends Controller
     public function trashed()
     {
         //$trashed = Post::withTrashed()->get();
-        $posts = Post::onlyTrashed()->get(); //shudu trashed post show korbe
-        $trash = "trash";
-        return view('posts.index',compact('posts','trash'));
+        
+        if(Auth::id() == 1){
+            $posts = Post::onlyTrashed()->get(); //shudu trashed post show korbe
+            $trash = "trash";
+            return view('posts.index',compact('posts','trash'));
+        }else{
+            $posts = Post::where('user_id', Auth::id())->onlyTrashed()->get(); //shudu trashed post show korbe
+            $trash = "trash";
+            return view('posts.index',compact('posts','trash'));
+        }
     }
 
 
@@ -65,6 +119,12 @@ class PostsController extends Controller
         
         //dd($request->all());
         $image = $request->image->store('posts');
+
+        if(Auth::id() == 1){
+            $approve = 'yes';
+        }else{
+            $approve = 'no';
+        }
        
         $post = Post::create([
             'title' => $request->title,
@@ -73,8 +133,18 @@ class PostsController extends Controller
             'category_id' => $request->category,
             'published_at' => $request->published_at,
             'image' => $image,
+            'is_approved' => $approve,
             'user_id' => Auth::id(),
         ]);
+
+        if($post->is_approved == 'yes'){
+            $subscribers = Subscriber::all();
+            foreach ($subscribers as $subscriber) {
+                Notification::route('mail',$subscriber->email)
+                ->notify(new NewPostNotify($post));
+            }
+        }
+
 
         if($request->tags){
            $post->tags()->attach($request->tags);
@@ -158,4 +228,7 @@ class PostsController extends Controller
         return redirect(route('posts.index'));
 
     }
+
+
+    
 }
