@@ -1,7 +1,7 @@
 @extends('layouts.blog')
 
 @section('title')
-    The SaaS Blog - {{ $category->name }}
+Self Development Blog - {{ $category->name }}
 @endsection
 
 @section('header')

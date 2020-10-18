@@ -1,7 +1,7 @@
 @extends('layouts.blog')
 
 @section('title')
-    {{ $post->title }}
+    {{ $post->title }} - Self Development Blog
 @endsection
 
 @section('header')
