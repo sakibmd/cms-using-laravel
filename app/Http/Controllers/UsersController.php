@@ -24,7 +24,7 @@ class UsersController extends Controller
             'about' => $request->about,
         ]);
         session()->flash('success', 'Profile Updated Successfully');
-        return redirect()->back();
+        return redirect()->route('home');
     }
 
     public function makeAdmin(User $user){

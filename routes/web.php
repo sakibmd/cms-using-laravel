@@ -41,6 +41,8 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('pending-posts-approve/{id}', 'PostsController@pendingApprove')->name('pending.approve');
     Route::get('pending-posts-remove/{id}', 'PostsController@pendingRemove')->name('pending.remove');
 
+
+
     Route::get('subscriber','SubscriberController@index')->name('subscriber.index');
     Route::delete('subscriber/{subscriber}','SubscriberController@deleteSubscriberFunction')->name('subscriber.destroy');
 
