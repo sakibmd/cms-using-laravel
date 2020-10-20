@@ -12,9 +12,12 @@
                         </div>
                     @endif
 
+                    @auth
                     @if (Auth::id() == 1)
                         <h2>Welcome Admin - <strong>{{ Auth::user()->name }}</strong></h2>
-                        <div class="card">
+                    @else
+                        <h2>Welcome User - <strong>{{ Auth::user()->name }}</strong></h2>
+                    @endif                        <div class="card">
                             <div class="card-body">
                                 <table class="table table-bordered">
                                     <tr>
@@ -35,10 +38,9 @@
                                 <a href="{{ route('users.edit-profile') }}" class="btn btn-success">Edit Profile</a>
                             </div>
                         </div>
-                    @else
-                        <h2>Welcome - <strong>{{ Auth::user()->name }}</strong></h2>
+                   
                         
-                    @endif
+                    @endauth
                 </div>
             </div>
        

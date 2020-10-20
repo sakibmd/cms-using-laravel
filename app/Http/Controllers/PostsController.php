@@ -120,22 +120,24 @@ class PostsController extends Controller
         //dd($request->all());
         $image = $request->image->store('posts');
 
+       $approve = 'idk';
         if(Auth::id() == 1){
             $approve = 'yes';
         }else{
             $approve = 'no';
         }
        
-        $post = Post::create([
-            'title' => $request->title,
-            'description' => $request->description,
-            'content' => $request->content,
-            'category_id' => $request->category,
-            'published_at' => $request->published_at,
-            'image' => $image,
-            'is_approved' => $approve,
-            'user_id' => Auth::id(),
-        ]);
+    
+        $post = new Post();
+        $post->title = $request->title;
+        $post->description = $request->description;
+        $post->content = $request->content;
+        $post->category_id =$request->category;
+        $post->published_at = $request->published_at;
+        $post->image = $image;
+        $post->is_approved = $approve;
+        $post->user_id = Auth::id();
+        $post->save();
 
         if($post->is_approved == 'yes'){
             $subscribers = Subscriber::all();
@@ -160,9 +162,9 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Post $post)
     {
-        //
+        return view('posts.show', compact('post'));
     }
 
     

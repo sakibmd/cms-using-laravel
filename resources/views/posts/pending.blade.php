@@ -17,6 +17,7 @@
                     <th>Image</th>
                     <th>Title</th>
                     <th>Category</th>
+                    <th>Details</th>
                     <th>Approve</th>
                     <th>Remove</th>
                 </tr>
@@ -25,10 +26,11 @@
                 @foreach ($posts as $post)
                 <tr>
                     <td><img src="{{ asset('storage/'.$post->image) }}" width="120px" height="65px" alt="image"></td>
-                    <td>{{ $post->title }}</td>
+                    <td>{{ str_limit( $post->title, 40) }}</td>
                     <td>{{ $post->category->name }}</td>
-                     <td><a href="{{ route('pending.approve', $post->id) }}" class="btn btn-success">Approve</a></td> 
-                     <td><a href="{{ route('pending.remove', $post->id) }}" class="btn btn-danger">Remove</a></td> 
+                    <td><a href="{{ route('posts.show', $post->id) }}" class="btn btn-success btn-sm">Details</a></td>
+                     <td><a href="{{ route('pending.approve', $post->id) }}" class="btn btn-info btn-sm">Approve</a></td> 
+                     <td><a href="{{ route('pending.remove', $post->id) }}" class="btn btn-danger btn-sm">Remove</a></td> 
                         
                     
                 </tr>

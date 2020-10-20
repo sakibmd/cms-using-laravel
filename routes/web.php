@@ -18,6 +18,10 @@ Route::get('blog/posts/{post}',[PostsController::class, 'show'])->name('blog.sho
 Route::get('blog/categories/{category}',[PostsController::class, 'category'])->name('blog.category');
 Route::get('blog/tags/{tag}',[PostsController::class, 'tag'])->name('blog.tag');
 
+
+Route::get('users/edit-profile', 'UsersController@edit')->name('users.edit-profile');
+    Route::put('users/update-profile', 'UsersController@update')->name('users.update-profile');
+
 Route::post('subscriber', 'SubscriberController@store')->name('subscriber.store');
 
 Auth::routes(['verify' => true]);
@@ -52,8 +56,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
 
 Route::middleware(['auth', 'admin', 'verified'])->group(function () {
     Route::get('users', 'UsersController@index')->name('users.index');
-    Route::get('users/edit-profile', 'UsersController@edit')->name('users.edit-profile');
-    Route::put('users/update-profile', 'UsersController@update')->name('users.update-profile');
+    
     Route::post('user/{user}/make-admin', 'UsersController@makeAdmin')->name('users.make-admin');
 });
 

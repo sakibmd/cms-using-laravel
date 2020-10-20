@@ -2,7 +2,11 @@
 
 @section('content')
 <div class="d-flex justify-content-end py-2">
-    <a href="{{ route('posts.create') }}" class="btn btn-success">Add Post</a>
+    @isset($trash)
+
+    @else   
+        <a href="{{ route('posts.create') }}" class="btn btn-success">Add Post</a>
+    @endisset
 </div>
 <div class="card card-default">
     <div class="card-header">
@@ -17,6 +21,8 @@
                     <th>Image</th>
                     <th>Title</th>
                     <th>Category</th>
+                    <th>View Count</th>
+                    <th></th>
                     <th></th>
                     <th></th>
                 </tr>
@@ -25,31 +31,43 @@
                 @foreach ($posts as $post)
                 <tr>
                     <td><img src="{{ asset('storage/'.$post->image) }}" width="120px" height="65px" alt="image"></td>
-                    <td>{{ $post->title }}</td>
+                    <td>{{  str_limit($post->title, 30) }}</td>
                     <td>{{ $post->category->name }}</td>
-                        @if ($post->trashed())
+                    <td>{{ $post->view_count }}</td>
+
+                    
+
+
+                    <td>
+                        <a href="{{ route('posts.show', $post->id) }}" class="btn btn-success btn-sm">Details</a>
+                    </td>
+                    
+                        
+                   
+                    <td>
+                        <form action="{{ route('posts.destroy', $post->id) }}" method="post">
+                            @csrf 
+                            @method('DELETE')
+                            <button type="submit" class="btn btn-danger btn-sm">{{ $post->trashed() ? 'Delete' : 'Trash' }}</button>
+                        </form>
+                    </td>
+
+                    @if ($post->trashed())
                             <td>
                                 <form action="{{ route('restore.posts', $post->id) }}" method="POST">
                                     @csrf 
                                     @method('PUT')
-                                    <button type="submit" class="btn btn-info">Restore</button>
+                                    <button type="submit" class="btn btn-info btn-sm">Restore</button>
                                 </form>
                             </td>
                         @else
                             @if (Auth::id() == $post->user_id)
                             <td>
-                                <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-info">Edit</a>
+                                <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-info btn-sm">Edit</a>
                             </td> 
                             @endif
                             
                         @endif
-                    <td>
-                        <form action="{{ route('posts.destroy', $post->id) }}" method="post">
-                            @csrf 
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-danger">{{ $post->trashed() ? 'Delete' : 'Trash' }}</button>
-                        </form>
-                    </td>
                 </tr>
                 @endforeach
             </tbody>
