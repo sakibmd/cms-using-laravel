@@ -6,7 +6,7 @@ Self Development Blog - {{ $category->name }}
 
 @section('header')
     <!-- Header -->
-    <header class="header text-center text-white" style="background-image: linear-gradient(-225deg, #5D9FFF 0%, #B8DCFF 48%, #6BBBFF 100%);">
+    <header class="header text-center text-white" style="background-image: linear-gradient(to right top, #051937, #003c5b, #006173, #02877c, #63aa7c);">
       <div class="container">
 
         <div class="row">
