@@ -15,13 +15,12 @@ use Illuminate\Support\Facades\Notification;
 
 class PostsController extends Controller
 {
-    
+
     public function __construct()
     {
         $this->middleware('verifyCategoriesCount')->only(['create', 'store']);
     }
-    
-    
+
     /**
      * Display a listing of the resource.
      *
@@ -29,52 +28,51 @@ class PostsController extends Controller
      */
     public function index()
     {
-        
 
-        if(Auth::id() == 1){
+        if (Auth::id() == 1) {
             $posts = Post::where('is_approved', 'yes')->latest()->get();
-        }else{
-            $posts = Post::where('user_id', Auth::id())->where('is_approved', 'yes')->latest()->get(); 
+        } else {
+            $posts = Post::where('user_id', Auth::id())->where('is_approved', 'yes')->latest()->get();
         }
         return view('posts.index', compact('posts'));
 
-
     }
 
-
-    public function pending(){
+    public function pending()
+    {
         $posts = Post::where('is_approved', 'no')->latest()->get();
         return view('posts.pending', compact('posts'));
     }
 
-    public function pendingPosTForUser(){
+    public function pendingPosTForUser()
+    {
         $posts = Post::where('user_id', Auth::id())->where('is_approved', 'no')->latest()->get();
         return view('posts.pendingPostforUser', compact('posts'));
     }
 
-    public function pendingApprove($id){
+    public function pendingApprove($id)
+    {
         $post = Post::find($id);
         $post->is_approved = 'yes';
         $post->save();
 
         $subscribers = Subscriber::all();
         foreach ($subscribers as $subscriber) {
-            Notification::route('mail',$subscriber->email)
-            ->notify(new NewPostNotify($post));
+            Notification::route('mail', $subscriber->email)
+                ->notify(new NewPostNotify($post));
         }
-        
+
         session()->flash('success', 'Pending Post Approved Successfully');
         return redirect()->back();
     }
 
-    public function pendingRemove($id){
+    public function pendingRemove($id)
+    {
         Post::find($id)->delete();
-        
+
         session()->flash('success', 'Pending Post Removed Successfully');
         return redirect()->back();
     }
-
-    
 
     /**
      * Show the form for creating a new resource.
@@ -86,7 +84,6 @@ class PostsController extends Controller
         return view('posts.create')->with('categories', Category::all())->with('tags', Tag::all());
     }
 
-
     /**
      * Show the form for creating a new resource.
      *
@@ -95,18 +92,17 @@ class PostsController extends Controller
     public function trashed()
     {
         //$trashed = Post::withTrashed()->get();
-        
-        if(Auth::id() == 1){
+
+        if (Auth::id() == 1) {
             $posts = Post::onlyTrashed()->get(); //shudu trashed post show korbe
             $trash = "trash";
-            return view('posts.index',compact('posts','trash'));
-        }else{
+            return view('posts.index', compact('posts', 'trash'));
+        } else {
             $posts = Post::where('user_id', Auth::id())->onlyTrashed()->get(); //shudu trashed post show korbe
             $trash = "trash";
-            return view('posts.index',compact('posts','trash'));
+            return view('posts.index', compact('posts', 'trash'));
         }
     }
-
 
     /**
      * Store a newly created resource in storage.
@@ -116,42 +112,40 @@ class PostsController extends Controller
      */
     public function store(CreatePostsRequest $request)
     {
-        
+
         //dd($request->all());
         $image = $request->image->store('posts');
 
-       $approve = 'idk';
-        if(Auth::id() == 1){
+        $approve = 'idk';
+        if (Auth::id() == 1) {
             $approve = 'yes';
-        }else{
+        } else {
             $approve = 'no';
         }
-       
-    
+
         $post = new Post();
         $post->title = $request->title;
         $post->description = $request->description;
         $post->content = $request->content;
-        $post->category_id =$request->category;
+        $post->category_id = $request->category;
         $post->published_at = $request->published_at;
         $post->image = $image;
         $post->is_approved = $approve;
         $post->user_id = Auth::id();
         $post->save();
 
-        if($post->is_approved == 'yes'){
+        if ($post->is_approved == 'yes') {
             $subscribers = Subscriber::all();
             foreach ($subscribers as $subscriber) {
-                Notification::route('mail',$subscriber->email)
-                ->notify(new NewPostNotify($post));
+                Notification::route('mail', $subscriber->email)
+                    ->notify(new NewPostNotify($post));
             }
         }
 
-
-        if($request->tags){
-           $post->tags()->attach($request->tags);
+        if ($request->tags) {
+            $post->tags()->attach($request->tags);
         }
-        
+
         session()->flash('success', 'Post Inserted Successfully');
         return redirect(route('posts.index'));
     }
@@ -167,7 +161,6 @@ class PostsController extends Controller
         return view('posts.show', compact('post'));
     }
 
-    
     public function restore($id)
     {
         $post = Post::withTrashed()->where('id', $id)->firstOrFail();
@@ -196,8 +189,8 @@ class PostsController extends Controller
      */
     public function update(UpdatePostsRequest $request, Post $post)
     {
-        $data = $request->only(['title', 'name', 'description', 'content','published_at']);
-        if($request->hasFile('image')){
+        $data = $request->only(['title', 'name', 'description', 'content', 'published_at']);
+        if ($request->hasFile('image')) {
             $image = $request->image->store('posts');
             $post->deleteImage();
             $data['image'] = $image;
@@ -218,11 +211,11 @@ class PostsController extends Controller
     public function destroy($id)
     {
         $post = Post::withTrashed()->where('id', $id)->firstOrFail();
-        if($post->trashed()){
+        if ($post->trashed()) {
             $post->deleteImage();
             $post->forceDelete();
 
-        }else{
+        } else {
             $post->delete();
         }
         $post->tags()->detach();
@@ -231,6 +224,4 @@ class PostsController extends Controller
 
     }
 
-
-    
 }
