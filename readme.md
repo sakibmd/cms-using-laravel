@@ -1,6 +1,6 @@
 <h3>It is a simple cms project. I have used LARAVEL framework and MySql database for this project. </h3
 
- <h3>Features : login, registration, admin/user panel, email verification, password reset, forget password, view count, manage tags, manage                      categories, email notification sending realtime, admin approval setting, post publishing schedule wise, profile update, subscriber handling  etc...</h3> 
+ <h3>Features : login, registration, admin/user panel, email verification, password reset, forget password, view count, manage tags, manage                      categories, email notification sending realtime, admin approval setting, post publishing schedule wise, profile update, subscriber handling, comment system  etc...</h3> 
 
 <h2>For Admin:</h2>
 
@@ -27,6 +27,8 @@
 
 11. Sign in/sign out
 
+12. Comment on a post
+
 
 
 <h2>For Author:</h2>
@@ -51,6 +53,8 @@
 9. Have profile option for change his profile information
 
 10. Have a nice dashboard where he sees his profile information etc....
+
+11. Comment on a post
 
 
 <h2>For Guest user: </h2>
